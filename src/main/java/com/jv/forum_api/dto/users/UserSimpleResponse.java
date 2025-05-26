@@ -1,4 +1,4 @@
-package com.jv.forum_api.dto;
+package com.jv.forum_api.dto.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

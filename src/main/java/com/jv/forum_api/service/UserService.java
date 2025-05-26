@@ -1,11 +1,13 @@
 package com.jv.forum_api.service;
 
-import com.jv.forum_api.dto.UserCreate;
-import com.jv.forum_api.dto.UserSimpleResponse;
+import com.jv.forum_api.dto.users.UserCreate;
+import com.jv.forum_api.dto.users.UserSimpleResponse;
+import com.jv.forum_api.dto.users.UserUpdate;
 import com.jv.forum_api.mapper.UserMapper;
 import com.jv.forum_api.repository.UserRepository;
 import com.jv.forum_api.service.interfaces.IUserService;
 import com.jv.forumapi.entities.User;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +44,33 @@ public class UserService implements IUserService {
 
         return null;
 
+    }
+
+    @Override
+    public UserSimpleResponse update(Integer id, UserUpdate user) {
+
+        User userDB = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if(user.getUsername() != null) {
+            userDB.setUsername(user.getUsername());
+        }
+
+        if(user.getEmail() != null) {
+            userDB.setEmail(user.getEmail());
+        }
+
+        if(user.getAbout() != null) {
+            userDB.setAbout(user.getAbout());
+        }
+
+        if(user.getPicture() != null) {
+            userDB.setPicture(user.getPicture());
+        }
+
+        User userDBUpdated = repository.save(userDB);
+
+        return mapper.mapToSimpleResponse(userDBUpdated);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.jv.forum_api.mapper;
 
-import com.jv.forum_api.dto.UserCreate;
-import com.jv.forum_api.dto.UserSimpleResponse;
+import com.jv.forum_api.dto.users.UserCreate;
+import com.jv.forum_api.dto.users.UserSimpleResponse;
 import com.jv.forumapi.entities.User;
 import org.springframework.stereotype.Component;
 
