@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: forum-api
+  datasource:
+    url: jdbc:mysql://localhost:3306/forum_db
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456789
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8081
+
