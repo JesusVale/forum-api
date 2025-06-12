@@ -37,9 +37,9 @@ public class UserService implements IUserService {
     public String login(UserCreate user) {
 
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                new UsernamePasswordAuthenticationToken(user.username(), user.password()));
         if(auth.isAuthenticated()) {
-            return jwtService.generateToken(user.getUsername());
+            return jwtService.generateToken(user.username());
         }
 
         return null;
@@ -52,20 +52,20 @@ public class UserService implements IUserService {
         User userDB = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        if(user.getUsername() != null) {
-            userDB.setUsername(user.getUsername());
+        if(user.username() != null) {
+            userDB.setUsername(user.username());
         }
 
-        if(user.getEmail() != null) {
-            userDB.setEmail(user.getEmail());
+        if(user.email() != null) {
+            userDB.setEmail(user.email());
         }
 
-        if(user.getAbout() != null) {
-            userDB.setAbout(user.getAbout());
+        if(user.about() != null) {
+            userDB.setAbout(user.about());
         }
 
-        if(user.getPicture() != null) {
-            userDB.setPicture(user.getPicture());
+        if(user.picture() != null) {
+            userDB.setPicture(user.picture());
         }
 
         User userDBUpdated = repository.save(userDB);

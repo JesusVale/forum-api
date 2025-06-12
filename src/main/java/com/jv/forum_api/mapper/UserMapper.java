@@ -11,21 +11,20 @@ public class UserMapper {
     public User mapToEntity(UserCreate userCreate) {
         User user = new User();
 
-        user.setUsername(userCreate.getUsername());
-        user.setPassword(userCreate.getPassword());
-        user.setEmail(userCreate.getEmail());
+        user.setUsername(userCreate.username());
+        user.setPassword(userCreate.password());
+        user.setEmail(userCreate.email());
 
         return user;
     }
 
     public UserSimpleResponse mapToSimpleResponse(User user) {
 
-        UserSimpleResponse userSimpleResponse = new UserSimpleResponse();
-        userSimpleResponse.setUsername(user.getUsername());
-        userSimpleResponse.setEmail(user.getEmail());
-        userSimpleResponse.setUserId(user.getUserId());
-
-        return userSimpleResponse;
+        return new UserSimpleResponse(
+                user.getUserId(),
+                user.getUsername(),
+                user.getEmail()
+        );
 
     }
 
