@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @AllArgsConstructor
-@Component
+@Component("auditorAwareImpl")
 public class SpringSecurityAuditorAware implements AuditorAware<User> {
 
     private UserRepository userRepository;
