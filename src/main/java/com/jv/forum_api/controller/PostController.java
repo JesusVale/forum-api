@@ -3,7 +3,7 @@ package com.jv.forum_api.controller;
 import com.jv.forum_api.dto.posts.PostFilter;
 import com.jv.forum_api.dto.posts.PostResponse;
 import com.jv.forum_api.dto.posts.PostSave;
-import com.jv.forum_api.service.PostService;
+import com.jv.forum_api.service.interfaces.IPostService;
 import com.jv.forumapi.entities.Post;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +18,13 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final PostService postService;
+    private final IPostService postService;
 
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody PostSave post){
 
-        Post savedPost = postService.save(post);
+        PostResponse savedPost = postService.save(post);
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
 
     }

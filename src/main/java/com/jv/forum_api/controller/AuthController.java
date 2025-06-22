@@ -3,7 +3,7 @@ package com.jv.forum_api.controller;
 import com.jv.forum_api.dto.users.UserCreate;
 import com.jv.forum_api.dto.users.UserSimpleResponse;
 import com.jv.forum_api.dto.users.UserUpdate;
-import com.jv.forum_api.service.UserService;
+import com.jv.forum_api.service.interfaces.IUserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class AuthController {
 
-    private UserService service;
+    private IUserService service;
 
     @PostMapping("/register")
     public ResponseEntity<UserSimpleResponse> save(@Valid @RequestBody UserCreate user) {

@@ -5,19 +5,17 @@ import com.jv.forum_api.dto.posts.PostResponse;
 import com.jv.forum_api.dto.posts.PostSave;
 import com.jv.forum_api.mapper.PostMapper;
 import com.jv.forum_api.repository.PostRepository;
-import com.jv.forum_api.repository.UserRepository;
 import com.jv.forum_api.repository.custom.PostQueryService;
+import com.jv.forum_api.service.interfaces.IAuthService;
 import com.jv.forum_api.service.interfaces.IPostService;
 import com.jv.forumapi.entities.Post;
 import com.jv.forumapi.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,16 +25,18 @@ public class PostService implements IPostService {
 
     private PostQueryService postQueryService;
 
-    private UserRepository userRepository;
+    private IAuthService authService;
 
     private PostMapper postMapper;
 
     @Override
-    public Post save(PostSave post) {
+    public PostResponse save(PostSave post) {
 
         Post postSave = postMapper.mapToEntity(post);
 
-        return postRepository.saveAndFlush(postSave);
+        Post savedPost = postRepository.saveAndFlush(postSave);
+
+        return postMapper.mapToResponse(savedPost);
     }
 
     @Override
@@ -47,12 +47,13 @@ public class PostService implements IPostService {
     @Override
     public List<PostResponse> findByUsersFollowed(Pageable pageable) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> userOptional = authService.getLoggedUser();
 
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        if (userOptional.isEmpty()) {
+            throw  new RuntimeException("User not found");
+        }
 
-        User user = userRepository.findByUsername(userDetails.getUsername());
-
+        User user = userOptional.get();
         return postRepository.findByUsersFollowed(user.getUserId(), pageable).toList();
     }
 

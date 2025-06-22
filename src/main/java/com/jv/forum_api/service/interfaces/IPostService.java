@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IPostService {
 
-    public Post save(PostSave post);
+    public PostResponse save(PostSave post);
 
     public PostResponse findByPostId(Integer postId);
 
