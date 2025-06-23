@@ -51,7 +51,7 @@ public class PostService implements IPostService {
         Optional<User> userOptional = authService.getLoggedUser();
 
         if (userOptional.isEmpty()) {
-            throw  new RuntimeException("User not found");
+            throw  new RuntimeException("Authentication error");
         }
 
         User user = userOptional.get();

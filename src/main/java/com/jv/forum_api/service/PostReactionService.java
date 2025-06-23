@@ -34,7 +34,7 @@ public class PostReactionService implements IPostReactionService {
         Optional<User> userOptional = authService.getLoggedUser();
 
         if(userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("Authentication error");
         }
 
         PostReaction postReaction = postReactionMapper.mapToEntity(postReactionSave, userOptional.get());
@@ -50,7 +50,7 @@ public class PostReactionService implements IPostReactionService {
         Optional<User> userOptional = authService.getLoggedUser();
 
         if(userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("Authentication error");
         }
 
         postRepository.findById(post).orElseThrow(() -> new EntityNotFoundException("Post not found"));
