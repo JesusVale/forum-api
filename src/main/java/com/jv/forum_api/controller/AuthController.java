@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class AuthController {
 
-    private IUserService service;
+    private final IUserService service;
 
     @PostMapping("/register")
     public ResponseEntity<UserSimpleResponse> save(@Valid @RequestBody UserCreate user) {

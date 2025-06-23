@@ -11,6 +11,7 @@ import com.jv.forum_api.service.interfaces.IPostService;
 import com.jv.forumapi.entities.Post;
 import com.jv.forumapi.entities.User;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostResponse> findByUsersFollowed(Pageable pageable) {
+    public Page<PostResponse> findByUsersFollowed(Pageable pageable) {
 
         Optional<User> userOptional = authService.getLoggedUser();
 
@@ -54,11 +55,11 @@ public class PostService implements IPostService {
         }
 
         User user = userOptional.get();
-        return postRepository.findByUsersFollowed(user.getUserId(), pageable).toList();
+        return postRepository.findByUsersFollowed(user.getUserId(), pageable);
     }
 
     @Override
-    public List<PostResponse> findByFilters(PostFilter filter, Pageable pageable) {
-        return postQueryService.findByFilters(filter, pageable).toList();
+    public Page<PostResponse> findByFilters(PostFilter filter, Pageable pageable) {
+        return postQueryService.findByFilters(filter, pageable);
     }
 }

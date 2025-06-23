@@ -6,6 +6,7 @@ import com.jv.forum_api.dto.posts.PostSave;
 import com.jv.forum_api.service.interfaces.IPostService;
 import com.jv.forumapi.entities.Post;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,6 @@ import java.util.List;
 public class PostController {
 
     private final IPostService postService;
-
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody PostSave post){
@@ -39,7 +39,7 @@ public class PostController {
     @GetMapping("/search/feed")
     public ResponseEntity<?> getFeed(Pageable pageable){
 
-        List<PostResponse> postsFeed = postService.findByUsersFollowed(pageable);
+        Page<PostResponse> postsFeed = postService.findByUsersFollowed(pageable);
         return new ResponseEntity<>(postsFeed, HttpStatus.OK);
 
     }
@@ -47,7 +47,7 @@ public class PostController {
     @GetMapping
     public ResponseEntity<?> getPosts(PostFilter filter, Pageable pageable){
 
-        List<PostResponse> postResponses = postService.findByFilters(filter, pageable);
+        Page<PostResponse> postResponses = postService.findByFilters(filter, pageable);
 
         return new ResponseEntity<>(postResponses, HttpStatus.OK);
 

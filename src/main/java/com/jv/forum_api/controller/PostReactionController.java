@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/post-reaction")
 public class PostReactionController {
 
-    private IPostReactionService postReactionService;
+    private final IPostReactionService postReactionService;
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody PostReactionSave postReactionSave) {

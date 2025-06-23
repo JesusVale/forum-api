@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecificationExecutor<Post> {
 
+    Boolean existsByPostId(Integer postId);
+
     @Query("SELECT " +
             "new com.jv.forum_api.dto.posts.PostResponse(" +
             "P.postId, " +
@@ -25,7 +27,7 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
             " WHERE P.postId = :postId")
     PostResponse findByPostId(Integer postId);
 
-    @Query("SELECT " +
+    @Query(value = "SELECT " +
             "new com.jv.forum_api.dto.posts.PostResponse(" +
             "P.postId," +
             "P.title," +
@@ -37,7 +39,9 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
             " JOIN P.createdBy U" +
             " WHERE P.createdBy IN " +
         "(SELECT F.id.user from FollowUsers F WHERE F.id.follower.userId = :loggedUser) " +
-            "ORDER BY P.createdAt DESC"
+            "ORDER BY P.createdAt DESC",
+            countQuery = "SELECT COUNT(P) FROM Post P WHERE P.createdBy IN " +
+                    "(SELECT F.id.user from FollowUsers F WHERE F.id.follower.userId = :loggedUser)"
     )
     Page<PostResponse> findByUsersFollowed(Integer loggedUser, Pageable pageable);
 
