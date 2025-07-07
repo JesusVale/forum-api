@@ -34,6 +34,7 @@ public class PostController {
 
         PostResponse postFound = postService.findByPostId(id);
         return new ResponseEntity<>(postFound, HttpStatus.OK);
+
     }
 
     @GetMapping("/search/feed")

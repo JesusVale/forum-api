@@ -4,7 +4,9 @@ import com.jv.forum_api.dto.posts.PostFilter;
 import com.jv.forum_api.dto.posts.PostResponse;
 import com.jv.forum_api.dto.users.UserSimpleResponse;
 import com.jv.forumapi.entities.Post;
+import com.jv.forumapi.entities.PostTag;
 import com.jv.forumapi.entities.User;
+import com.jv.forumapi.enums.Tag;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Tuple;
@@ -61,23 +63,20 @@ public class PostQueryService {
                                         t.get(4, String.class),
                                         t.get(5, String.class)
                                 ),
-                                t.get(6, LocalDateTime.class)
+                                t.get(6, LocalDateTime.class),
+                                null
                         )).toList();
 
-        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        Root<Post> countRoot = countQuery.from(Post.class);
-        Join<Post, User> userCount = root.join("createdBy");
-        List<Predicate> countPredicates = buildPredicates(cb, countRoot, userCount, filter);
-        countQuery.select(cb.count(countRoot)).where(countPredicates.toArray(new Predicate[0]));
 
-        Long total = em.createQuery(countQuery).getSingleResult();
+
+        Long total = getTotalPosts(cb, root, query, filter);
 
         return new PageImpl<>(resultList, pageable, total);
 
-
     }
 
-    private List<Predicate> buildPredicates(CriteriaBuilder cb, Root<Post> root, Join<Post, User> user, PostFilter filter) {
+    private List<Predicate> buildPredicates(CriteriaBuilder cb, Root<Post> root, Join<Post, User> user,
+                                          PostFilter filter) {
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -93,8 +92,25 @@ public class PostQueryService {
             predicates.add(cb.equal(user.get("userId"), filter.userId()));
         }
 
+        if(filter.tags() != null && !filter.tags().isEmpty()) {
+            for (Tag tag : filter.tags()) {
+                predicates.add(cb.isMember(tag, root.get("tags")));
+            }
+        }
+
         return predicates;
     }
 
+
+    private Long getTotalPosts(CriteriaBuilder cb, Root<Post> root, CriteriaQuery<Tuple> query, PostFilter filter) {
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<Post> countRoot = countQuery.from(Post.class);
+        Join<Post, User> userCount = root.join("createdBy");
+
+        List<Predicate> countPredicates = buildPredicates(cb, countRoot, userCount, filter);
+        countQuery.select(cb.count(countRoot)).where(countPredicates.toArray(new Predicate[0]));
+
+        return em.createQuery(countQuery).getSingleResult();
+    }
 
 }

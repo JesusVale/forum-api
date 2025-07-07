@@ -2,25 +2,33 @@ package com.jv.forum_api.repository;
 
 import com.jv.forum_api.dto.posts.PostResponse;
 import com.jv.forumapi.entities.Post;
+import com.jv.forumapi.enums.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Set;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecificationExecutor<Post> {
 
     Boolean existsByPostId(Integer postId);
 
-    @Query("SELECT " +
+    @Query("SELECT P.tags FROM Post P WHERE P.postId = :id")
+    Set<Tag> findTagsByPostId(@Param("id") Integer id);
+
+    @Query(value = "SELECT " +
             "new com.jv.forum_api.dto.posts.PostResponse(" +
             "P.postId, " +
             "P.title, " +
             "P.content, " +
             "new com.jv.forum_api.dto.users.UserSimpleResponse( U.userId, U.username, U.email), " +
-            "P.createdAt" +
+            "P.createdAt," +
+            "null" +
             ")" +
             " FROM Post P" +
             " JOIN P.createdBy U" +
@@ -33,7 +41,8 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
             "P.title," +
             "P.content," +
             "new com.jv.forum_api.dto.users.UserSimpleResponse( U.userId, U.username, U.email )," +
-            "P.createdAt" +
+            "P.createdAt," +
+            "null" +
             ")" +
             " FROM Post P" +
             " JOIN P.createdBy U" +
