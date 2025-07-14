@@ -5,12 +5,10 @@ import com.jv.forum_api.dto.posts.PostResponse;
 import com.jv.forum_api.dto.posts.PostSave;
 import com.jv.forum_api.mapper.PostMapper;
 import com.jv.forum_api.repository.PostRepository;
-import com.jv.forum_api.repository.PostTagRepository;
 import com.jv.forum_api.repository.custom.PostQueryService;
 import com.jv.forum_api.service.interfaces.IAuthService;
 import com.jv.forum_api.service.interfaces.IPostService;
 import com.jv.forumapi.entities.Post;
-import java.util.List;
 import com.jv.forumapi.entities.User;
 import com.jv.forumapi.enums.Tag;
 import lombok.AllArgsConstructor;
@@ -26,8 +24,6 @@ import java.util.Set;
 public class PostService implements IPostService {
 
     private PostRepository postRepository;
-
-    private PostTagRepository postTagRepository;
 
     private PostQueryService postQueryService;
 
