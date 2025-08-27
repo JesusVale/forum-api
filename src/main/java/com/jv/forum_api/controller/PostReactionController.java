@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/post-reaction")
 public class PostReactionController {
 
-    private final IPostReactionService postReactionService;
+    private IPostReactionService postReactionService;
 
     @Operation(
             summary = "Adds a reaction to a post",

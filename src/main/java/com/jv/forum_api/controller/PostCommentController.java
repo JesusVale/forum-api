@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/comments")
 public class PostCommentController {
 
-    private final IPostCommentService postCommentService;
+    private IPostCommentService postCommentService;
 
     @Operation(
             summary = "Creates a comment",

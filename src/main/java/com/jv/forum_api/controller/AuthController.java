@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class AuthController {
 
-    private final IUserService service;
+    private IUserService service;
 
     @Operation(
             summary = "Create new User",
